@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+message SignMessage {
+  required uint32 position_1 = 1;  
+  required uint32 position_2 = 2;  
+  required uint32 distance_2 = 3;  
+  required uint32 position_3 = 4;  
+  required uint32 distance_3 = 5;  
+}
+
+message SpeedMessage{
+    required uint32 speed = 1;
+}
+
+message SoundMessage{
+    required uint32 sound_id = 1;
+}
+
+message OverlimitSpeedMessage{
+    required bool is_over_speed_limit = 1;
+}
+

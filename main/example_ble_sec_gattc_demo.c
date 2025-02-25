@@ -30,7 +30,10 @@
 #include "freertos/FreeRTOS.h"
 #include "uart_lib_header.h"
 #include "my_utils.h"
+#include "message.pb-c.h"
 void uart_cb(uint8_t *data, uint16_t len);
+void client_send_sign(uint8_t *data, uint16_t len);
+void client_send_speed(uint8_t *data, uint16_t len);
 
 #define GATTC_TAG "SEC_GATTC_DEMO"
 #define REMOTE_SERVICE_UUID 0x2A60
@@ -53,7 +56,7 @@ static esp_bt_uuid_t remote_filter_service_uuid = {
 
 static bool connect = false;
 static bool get_service = false;
-static const char remote_device_name[] = "Sign Watch GOFA";
+static const char remote_device_name[] = "SIGN WATCH GOFA";
 
 static esp_ble_scan_params_t ble_scan_params = {
     .scan_type = BLE_SCAN_TYPE_ACTIVE,
@@ -565,7 +568,7 @@ static void esp_gattc_cb(esp_gattc_cb_event_t event, esp_gatt_if_t gattc_if, esp
     } while (0);
 }
 
-#define BLE 0
+#define BLE 1
 void app_main(void)
 {
     // Initialize NVS.
@@ -579,7 +582,7 @@ void app_main(void)
     uart_init();
     register_cb(uart_cb);
 
-    #if BLE
+#if BLE
     ESP_ERROR_CHECK(esp_bt_controller_mem_release(ESP_BT_MODE_CLASSIC_BT));
 
     esp_bt_controller_config_t bt_cfg = BT_CONTROLLER_INIT_CONFIG_DEFAULT();
@@ -656,14 +659,68 @@ void app_main(void)
     and the init key means which key you can distribute to the slave. */
     esp_ble_gap_set_security_param(ESP_BLE_SM_SET_INIT_KEY, &init_key, sizeof(uint8_t));
     esp_ble_gap_set_security_param(ESP_BLE_SM_SET_RSP_KEY, &rsp_key, sizeof(uint8_t));
-    #endif
+#endif
+    int i = 0;
+    while (1)
+    {
+        for (int i = 0; i < 121; i++)
+        {
+            void *buf;
+            unsigned len = 0;
+            SpeedMessage speed_msg = SPEED_MESSAGE__INIT;
+            speed_msg.speed = i;
+            len = speed_message__get_packed_size(&speed_msg);
+            buf = (uint8_t *)malloc(len);
+            speed_message__pack(&speed_msg, (uint8_t *)buf);
+            client_send_speed(buf, len);
+            vTaskDelay(1000 / portTICK_PERIOD_MS);
+        }
+    }
 }
 
 sign_display_on_watch_t receive_data = {0};
+
 void uart_cb(uint8_t *data, uint16_t len)
 {
     ESP_LOGI(GATTC_TAG, "Uart data %s", (char *)data);
     sign_data_t sign_data = sign_handle(data, len);
     receive_data = get_sign_display_on_watch(sign_data);
     ESP_LOGI(GATTC_TAG, "position 1 = %d , position 2 = %d  - %d , position 3 = %d  - %d      ", receive_data.position_1, receive_data.position_2, receive_data.distance_to_ps_2, receive_data.position_3, receive_data.distance_to_ps_3);
+    if (receive_data.position_1 != 0)
+    {
+        SignMessage sign_msg = SIGN_MESSAGE__INIT;
+        void *buf;     // Buffer to store serialized data
+        unsigned leng; // Length of serialized data
+        sign_msg.position_1 = receive_data.position_1;
+        sign_msg.position_2 = receive_data.position_2;
+        sign_msg.distance_2 = receive_data.distance_to_ps_2;
+        sign_msg.position_3 = receive_data.position_3;
+        sign_msg.distance_3 = receive_data.distance_to_ps_3;
+        leng = sign_message__get_packed_size(&sign_msg);
+        buf = (uint8_t *)malloc(leng);
+        sign_message__pack(&sign_msg, (uint8_t *)buf);
+        client_send_sign(buf, leng);
+    }
+}
+
+void client_send_sign(uint8_t *data, uint16_t len)
+{
+    esp_ble_gattc_write_char(gl_profile_tab[0].gattc_if,
+                             0,
+                             0x2a,
+                             len,
+                             data,
+                             ESP_GATT_WRITE_TYPE_RSP,
+                             ESP_GATT_AUTH_REQ_NONE);
+}
+
+void client_send_speed(uint8_t *data, uint16_t len)
+{
+    esp_ble_gattc_write_char(gl_profile_tab[0].gattc_if,
+                             0,
+                             0x2c,
+                             len,
+                             data,
+                             ESP_GATT_WRITE_TYPE_RSP,
+                             ESP_GATT_AUTH_REQ_NONE);
 }
