@@ -56,7 +56,7 @@ static esp_bt_uuid_t remote_filter_service_uuid = {
 
 static bool connect = false;
 static bool get_service = false;
-static const char remote_device_name[] = "SIGN WATCH GOFA";
+static const char remote_device_name[] = "SIGN WATCH GOFA 02";
 
 static esp_ble_scan_params_t ble_scan_params = {
     .scan_type = BLE_SCAN_TYPE_ACTIVE,
@@ -649,16 +649,16 @@ void app_main(void)
     uint8_t init_key = ESP_BLE_ENC_KEY_MASK | ESP_BLE_ID_KEY_MASK;
     uint8_t rsp_key = ESP_BLE_ENC_KEY_MASK | ESP_BLE_ID_KEY_MASK;
     uint8_t oob_support = ESP_BLE_OOB_DISABLE;
-    esp_ble_gap_set_security_param(ESP_BLE_SM_AUTHEN_REQ_MODE, &auth_req, sizeof(uint8_t));
-    esp_ble_gap_set_security_param(ESP_BLE_SM_IOCAP_MODE, &iocap, sizeof(uint8_t));
-    esp_ble_gap_set_security_param(ESP_BLE_SM_MAX_KEY_SIZE, &key_size, sizeof(uint8_t));
-    esp_ble_gap_set_security_param(ESP_BLE_SM_OOB_SUPPORT, &oob_support, sizeof(uint8_t));
-    /* If your BLE device act as a Slave, the init_key means you hope which types of key of the master should distribute to you,
-    and the response key means which key you can distribute to the Master;
-    If your BLE device act as a master, the response key means you hope which types of key of the slave should distribute to you,
-    and the init key means which key you can distribute to the slave. */
-    esp_ble_gap_set_security_param(ESP_BLE_SM_SET_INIT_KEY, &init_key, sizeof(uint8_t));
-    esp_ble_gap_set_security_param(ESP_BLE_SM_SET_RSP_KEY, &rsp_key, sizeof(uint8_t));
+    // esp_ble_gap_set_security_param(ESP_BLE_SM_AUTHEN_REQ_MODE, &auth_req, sizeof(uint8_t));
+    // esp_ble_gap_set_security_param(ESP_BLE_SM_IOCAP_MODE, &iocap, sizeof(uint8_t));
+    // esp_ble_gap_set_security_param(ESP_BLE_SM_MAX_KEY_SIZE, &key_size, sizeof(uint8_t));
+    // esp_ble_gap_set_security_param(ESP_BLE_SM_OOB_SUPPORT, &oob_support, sizeof(uint8_t));
+    // /* If your BLE device act as a Slave, the init_key means you hope which types of key of the master should distribute to you,
+    // and the response key means which key you can distribute to the Master;
+    // If your BLE device act as a master, the response key means you hope which types of key of the slave should distribute to you,
+    // and the init key means which key you can distribute to the slave. */
+    // esp_ble_gap_set_security_param(ESP_BLE_SM_SET_INIT_KEY, &init_key, sizeof(uint8_t));
+    // esp_ble_gap_set_security_param(ESP_BLE_SM_SET_RSP_KEY, &rsp_key, sizeof(uint8_t));
 #endif
     int i = 0;
     while (1)
@@ -679,15 +679,49 @@ void app_main(void)
 }
 
 sign_display_on_watch_t receive_data = {0};
+void adjust_distance(int *distance)
+{
+    if (*distance >= 250 && *distance < 300)
+    {
+        *distance = 250;
+    }
+    else if (*distance < 250 && *distance >= 200)
+    {
+        *distance = 200;
+    }
+    else if (*distance < 200 && *distance >= 150)
+    {
+        *distance = 150;
+    }
+    else if (*distance < 150 && *distance >= 100)
+    {
+        *distance = 100;
+    }
+    else if (*distance < 100 && *distance >= 50)
+    {
+        *distance = 50;
+    }
+    else if (*distance < 50 && *distance >= 25)
+    {
+        *distance = 25;
+    }
+}
 
 void uart_cb(uint8_t *data, uint16_t len)
 {
     ESP_LOGI(GATTC_TAG, "Uart data %s", (char *)data);
     sign_data_t sign_data = sign_handle(data, len);
     receive_data = get_sign_display_on_watch(sign_data);
-    ESP_LOGI(GATTC_TAG, "position 1 = %d , position 2 = %d  - %d , position 3 = %d  - %d      ", receive_data.position_1, receive_data.position_2, receive_data.distance_to_ps_2, receive_data.position_3, receive_data.distance_to_ps_3);
+    ESP_LOGI(GATTC_TAG, "position 1 = %d , position 2 = %d  - %d , position 3 = %d  - %d      ",
+             receive_data.position_1, receive_data.position_2, receive_data.distance_to_ps_2,
+             receive_data.position_3, receive_data.distance_to_ps_3);
+
     if (receive_data.position_1 != 0)
     {
+        // Adjust distances before processing
+        adjust_distance(&receive_data.distance_to_ps_2);
+        adjust_distance(&receive_data.distance_to_ps_3);
+
         SignMessage sign_msg = SIGN_MESSAGE__INIT;
         void *buf;     // Buffer to store serialized data
         unsigned leng; // Length of serialized data
