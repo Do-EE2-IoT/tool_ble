@@ -56,7 +56,7 @@ static esp_bt_uuid_t remote_filter_service_uuid = {
 
 static bool connect = false;
 static bool get_service = false;
-static const char remote_device_name[] = "SIGN WATCH GOFA 02";
+static const char remote_device_name[] = "GOSAFE";
 
 static esp_ble_scan_params_t ble_scan_params = {
     .scan_type = BLE_SCAN_TYPE_ACTIVE,
@@ -649,16 +649,16 @@ void app_main(void)
     uint8_t init_key = ESP_BLE_ENC_KEY_MASK | ESP_BLE_ID_KEY_MASK;
     uint8_t rsp_key = ESP_BLE_ENC_KEY_MASK | ESP_BLE_ID_KEY_MASK;
     uint8_t oob_support = ESP_BLE_OOB_DISABLE;
-    // esp_ble_gap_set_security_param(ESP_BLE_SM_AUTHEN_REQ_MODE, &auth_req, sizeof(uint8_t));
-    // esp_ble_gap_set_security_param(ESP_BLE_SM_IOCAP_MODE, &iocap, sizeof(uint8_t));
-    // esp_ble_gap_set_security_param(ESP_BLE_SM_MAX_KEY_SIZE, &key_size, sizeof(uint8_t));
-    // esp_ble_gap_set_security_param(ESP_BLE_SM_OOB_SUPPORT, &oob_support, sizeof(uint8_t));
+    esp_ble_gap_set_security_param(ESP_BLE_SM_AUTHEN_REQ_MODE, &auth_req, sizeof(uint8_t));
+    esp_ble_gap_set_security_param(ESP_BLE_SM_IOCAP_MODE, &iocap, sizeof(uint8_t));
+    esp_ble_gap_set_security_param(ESP_BLE_SM_MAX_KEY_SIZE, &key_size, sizeof(uint8_t));
+    esp_ble_gap_set_security_param(ESP_BLE_SM_OOB_SUPPORT, &oob_support, sizeof(uint8_t));
     // /* If your BLE device act as a Slave, the init_key means you hope which types of key of the master should distribute to you,
     // and the response key means which key you can distribute to the Master;
     // If your BLE device act as a master, the response key means you hope which types of key of the slave should distribute to you,
     // and the init key means which key you can distribute to the slave. */
-    // esp_ble_gap_set_security_param(ESP_BLE_SM_SET_INIT_KEY, &init_key, sizeof(uint8_t));
-    // esp_ble_gap_set_security_param(ESP_BLE_SM_SET_RSP_KEY, &rsp_key, sizeof(uint8_t));
+    esp_ble_gap_set_security_param(ESP_BLE_SM_SET_INIT_KEY, &init_key, sizeof(uint8_t));
+    esp_ble_gap_set_security_param(ESP_BLE_SM_SET_RSP_KEY, &rsp_key, sizeof(uint8_t));
 #endif
     int i = 0;
     while (1)
@@ -725,6 +725,9 @@ void uart_cb(uint8_t *data, uint16_t len)
         SignMessage sign_msg = SIGN_MESSAGE__INIT;
         void *buf;     // Buffer to store serialized data
         unsigned leng; // Length of serialized data
+        sign_msg.position_1 = 15;
+        sign_msg.position_2 = 32;
+        
         sign_msg.position_1 = receive_data.position_1;
         sign_msg.position_2 = receive_data.position_2;
         sign_msg.distance_2 = receive_data.distance_to_ps_2;
