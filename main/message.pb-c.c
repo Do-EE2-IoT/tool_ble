@@ -187,12 +187,237 @@ void   overlimit_speed_message__free_unpacked
   assert(message->base.descriptor == &overlimit_speed_message__descriptor);
   protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
 }
+void   ota_type_message__init
+                     (OtaTypeMessage         *message)
+{
+  static const OtaTypeMessage init_value = OTA_TYPE_MESSAGE__INIT;
+  *message = init_value;
+}
+size_t ota_type_message__get_packed_size
+                     (const OtaTypeMessage *message)
+{
+  assert(message->base.descriptor == &ota_type_message__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t ota_type_message__pack
+                     (const OtaTypeMessage *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &ota_type_message__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t ota_type_message__pack_to_buffer
+                     (const OtaTypeMessage *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &ota_type_message__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+OtaTypeMessage *
+       ota_type_message__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (OtaTypeMessage *)
+     protobuf_c_message_unpack (&ota_type_message__descriptor,
+                                allocator, len, data);
+}
+void   ota_type_message__free_unpacked
+                     (OtaTypeMessage *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &ota_type_message__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   rotate_message__init
+                     (RotateMessage         *message)
+{
+  static const RotateMessage init_value = ROTATE_MESSAGE__INIT;
+  *message = init_value;
+}
+size_t rotate_message__get_packed_size
+                     (const RotateMessage *message)
+{
+  assert(message->base.descriptor == &rotate_message__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t rotate_message__pack
+                     (const RotateMessage *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &rotate_message__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t rotate_message__pack_to_buffer
+                     (const RotateMessage *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &rotate_message__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+RotateMessage *
+       rotate_message__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (RotateMessage *)
+     protobuf_c_message_unpack (&rotate_message__descriptor,
+                                allocator, len, data);
+}
+void   rotate_message__free_unpacked
+                     (RotateMessage *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &rotate_message__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   adjust_volume_sound_message__init
+                     (AdjustVolumeSoundMessage         *message)
+{
+  static const AdjustVolumeSoundMessage init_value = ADJUST_VOLUME_SOUND_MESSAGE__INIT;
+  *message = init_value;
+}
+size_t adjust_volume_sound_message__get_packed_size
+                     (const AdjustVolumeSoundMessage *message)
+{
+  assert(message->base.descriptor == &adjust_volume_sound_message__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t adjust_volume_sound_message__pack
+                     (const AdjustVolumeSoundMessage *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &adjust_volume_sound_message__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t adjust_volume_sound_message__pack_to_buffer
+                     (const AdjustVolumeSoundMessage *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &adjust_volume_sound_message__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+AdjustVolumeSoundMessage *
+       adjust_volume_sound_message__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (AdjustVolumeSoundMessage *)
+     protobuf_c_message_unpack (&adjust_volume_sound_message__descriptor,
+                                allocator, len, data);
+}
+void   adjust_volume_sound_message__free_unpacked
+                     (AdjustVolumeSoundMessage *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &adjust_volume_sound_message__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   adjust_screen_bright_message__init
+                     (AdjustScreenBrightMessage         *message)
+{
+  static const AdjustScreenBrightMessage init_value = ADJUST_SCREEN_BRIGHT_MESSAGE__INIT;
+  *message = init_value;
+}
+size_t adjust_screen_bright_message__get_packed_size
+                     (const AdjustScreenBrightMessage *message)
+{
+  assert(message->base.descriptor == &adjust_screen_bright_message__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t adjust_screen_bright_message__pack
+                     (const AdjustScreenBrightMessage *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &adjust_screen_bright_message__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t adjust_screen_bright_message__pack_to_buffer
+                     (const AdjustScreenBrightMessage *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &adjust_screen_bright_message__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+AdjustScreenBrightMessage *
+       adjust_screen_bright_message__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (AdjustScreenBrightMessage *)
+     protobuf_c_message_unpack (&adjust_screen_bright_message__descriptor,
+                                allocator, len, data);
+}
+void   adjust_screen_bright_message__free_unpacked
+                     (AdjustScreenBrightMessage *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &adjust_screen_bright_message__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
+void   adjust_setting_message__init
+                     (AdjustSettingMessage         *message)
+{
+  static const AdjustSettingMessage init_value = ADJUST_SETTING_MESSAGE__INIT;
+  *message = init_value;
+}
+size_t adjust_setting_message__get_packed_size
+                     (const AdjustSettingMessage *message)
+{
+  assert(message->base.descriptor == &adjust_setting_message__descriptor);
+  return protobuf_c_message_get_packed_size ((const ProtobufCMessage*)(message));
+}
+size_t adjust_setting_message__pack
+                     (const AdjustSettingMessage *message,
+                      uint8_t       *out)
+{
+  assert(message->base.descriptor == &adjust_setting_message__descriptor);
+  return protobuf_c_message_pack ((const ProtobufCMessage*)message, out);
+}
+size_t adjust_setting_message__pack_to_buffer
+                     (const AdjustSettingMessage *message,
+                      ProtobufCBuffer *buffer)
+{
+  assert(message->base.descriptor == &adjust_setting_message__descriptor);
+  return protobuf_c_message_pack_to_buffer ((const ProtobufCMessage*)message, buffer);
+}
+AdjustSettingMessage *
+       adjust_setting_message__unpack
+                     (ProtobufCAllocator  *allocator,
+                      size_t               len,
+                      const uint8_t       *data)
+{
+  return (AdjustSettingMessage *)
+     protobuf_c_message_unpack (&adjust_setting_message__descriptor,
+                                allocator, len, data);
+}
+void   adjust_setting_message__free_unpacked
+                     (AdjustSettingMessage *message,
+                      ProtobufCAllocator *allocator)
+{
+  if(!message)
+    return;
+  assert(message->base.descriptor == &adjust_setting_message__descriptor);
+  protobuf_c_message_free_unpacked ((ProtobufCMessage*)message, allocator);
+}
 static const ProtobufCFieldDescriptor sign_message__field_descriptors[5] =
 {
   {
     "position_1",
     1,
-    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_UINT32,
     0,   /* quantifier_offset */
     offsetof(SignMessage, position_1),
@@ -204,7 +429,7 @@ static const ProtobufCFieldDescriptor sign_message__field_descriptors[5] =
   {
     "position_2",
     2,
-    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_UINT32,
     0,   /* quantifier_offset */
     offsetof(SignMessage, position_2),
@@ -216,7 +441,7 @@ static const ProtobufCFieldDescriptor sign_message__field_descriptors[5] =
   {
     "distance_2",
     3,
-    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_UINT32,
     0,   /* quantifier_offset */
     offsetof(SignMessage, distance_2),
@@ -228,7 +453,7 @@ static const ProtobufCFieldDescriptor sign_message__field_descriptors[5] =
   {
     "position_3",
     4,
-    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_UINT32,
     0,   /* quantifier_offset */
     offsetof(SignMessage, position_3),
@@ -240,7 +465,7 @@ static const ProtobufCFieldDescriptor sign_message__field_descriptors[5] =
   {
     "distance_3",
     5,
-    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_UINT32,
     0,   /* quantifier_offset */
     offsetof(SignMessage, distance_3),
@@ -282,7 +507,7 @@ static const ProtobufCFieldDescriptor speed_message__field_descriptors[1] =
   {
     "speed",
     1,
-    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_UINT32,
     0,   /* quantifier_offset */
     offsetof(SpeedMessage, speed),
@@ -320,7 +545,7 @@ static const ProtobufCFieldDescriptor sound_message__field_descriptors[1] =
   {
     "sound_id",
     1,
-    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_UINT32,
     0,   /* quantifier_offset */
     offsetof(SoundMessage, sound_id),
@@ -358,7 +583,7 @@ static const ProtobufCFieldDescriptor overlimit_speed_message__field_descriptors
   {
     "is_over_speed_limit",
     1,
-    PROTOBUF_C_LABEL_REQUIRED,
+    PROTOBUF_C_LABEL_NONE,
     PROTOBUF_C_TYPE_BOOL,
     0,   /* quantifier_offset */
     offsetof(OverlimitSpeedMessage, is_over_speed_limit),
@@ -389,5 +614,221 @@ const ProtobufCMessageDescriptor overlimit_speed_message__descriptor =
   overlimit_speed_message__field_indices_by_name,
   1,  overlimit_speed_message__number_ranges,
   (ProtobufCMessageInit) overlimit_speed_message__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor ota_type_message__field_descriptors[1] =
+{
+  {
+    "type",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(OtaTypeMessage, type),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned ota_type_message__field_indices_by_name[] = {
+  0,   /* field[0] = type */
+};
+static const ProtobufCIntRange ota_type_message__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 1 }
+};
+const ProtobufCMessageDescriptor ota_type_message__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "OtaTypeMessage",
+  "OtaTypeMessage",
+  "OtaTypeMessage",
+  "",
+  sizeof(OtaTypeMessage),
+  1,
+  ota_type_message__field_descriptors,
+  ota_type_message__field_indices_by_name,
+  1,  ota_type_message__number_ranges,
+  (ProtobufCMessageInit) ota_type_message__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor rotate_message__field_descriptors[1] =
+{
+  {
+    "rotate_type",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(RotateMessage, rotate_type),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned rotate_message__field_indices_by_name[] = {
+  0,   /* field[0] = rotate_type */
+};
+static const ProtobufCIntRange rotate_message__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 1 }
+};
+const ProtobufCMessageDescriptor rotate_message__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "RotateMessage",
+  "RotateMessage",
+  "RotateMessage",
+  "",
+  sizeof(RotateMessage),
+  1,
+  rotate_message__field_descriptors,
+  rotate_message__field_indices_by_name,
+  1,  rotate_message__number_ranges,
+  (ProtobufCMessageInit) rotate_message__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor adjust_volume_sound_message__field_descriptors[1] =
+{
+  {
+    "volume",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(AdjustVolumeSoundMessage, volume),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned adjust_volume_sound_message__field_indices_by_name[] = {
+  0,   /* field[0] = volume */
+};
+static const ProtobufCIntRange adjust_volume_sound_message__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 1 }
+};
+const ProtobufCMessageDescriptor adjust_volume_sound_message__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "AdjustVolumeSoundMessage",
+  "AdjustVolumeSoundMessage",
+  "AdjustVolumeSoundMessage",
+  "",
+  sizeof(AdjustVolumeSoundMessage),
+  1,
+  adjust_volume_sound_message__field_descriptors,
+  adjust_volume_sound_message__field_indices_by_name,
+  1,  adjust_volume_sound_message__number_ranges,
+  (ProtobufCMessageInit) adjust_volume_sound_message__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor adjust_screen_bright_message__field_descriptors[1] =
+{
+  {
+    "bright_level",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_UINT32,
+    0,   /* quantifier_offset */
+    offsetof(AdjustScreenBrightMessage, bright_level),
+    NULL,
+    NULL,
+    0,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned adjust_screen_bright_message__field_indices_by_name[] = {
+  0,   /* field[0] = bright_level */
+};
+static const ProtobufCIntRange adjust_screen_bright_message__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 1 }
+};
+const ProtobufCMessageDescriptor adjust_screen_bright_message__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "AdjustScreenBrightMessage",
+  "AdjustScreenBrightMessage",
+  "AdjustScreenBrightMessage",
+  "",
+  sizeof(AdjustScreenBrightMessage),
+  1,
+  adjust_screen_bright_message__field_descriptors,
+  adjust_screen_bright_message__field_indices_by_name,
+  1,  adjust_screen_bright_message__number_ranges,
+  (ProtobufCMessageInit) adjust_screen_bright_message__init,
+  NULL,NULL,NULL    /* reserved[123] */
+};
+static const ProtobufCFieldDescriptor adjust_setting_message__field_descriptors[3] =
+{
+  {
+    "volume_msg",
+    1,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(AdjustSettingMessage, setting_case),
+    offsetof(AdjustSettingMessage, volume_msg),
+    &adjust_volume_sound_message__descriptor,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "bright_msg",
+    2,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(AdjustSettingMessage, setting_case),
+    offsetof(AdjustSettingMessage, bright_msg),
+    &adjust_screen_bright_message__descriptor,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+  {
+    "rotate_msg",
+    3,
+    PROTOBUF_C_LABEL_NONE,
+    PROTOBUF_C_TYPE_MESSAGE,
+    offsetof(AdjustSettingMessage, setting_case),
+    offsetof(AdjustSettingMessage, rotate_msg),
+    &rotate_message__descriptor,
+    NULL,
+    0 | PROTOBUF_C_FIELD_FLAG_ONEOF,             /* flags */
+    0,NULL,NULL    /* reserved1,reserved2, etc */
+  },
+};
+static const unsigned adjust_setting_message__field_indices_by_name[] = {
+  1,   /* field[1] = bright_msg */
+  2,   /* field[2] = rotate_msg */
+  0,   /* field[0] = volume_msg */
+};
+static const ProtobufCIntRange adjust_setting_message__number_ranges[1 + 1] =
+{
+  { 1, 0 },
+  { 0, 3 }
+};
+const ProtobufCMessageDescriptor adjust_setting_message__descriptor =
+{
+  PROTOBUF_C__MESSAGE_DESCRIPTOR_MAGIC,
+  "AdjustSettingMessage",
+  "AdjustSettingMessage",
+  "AdjustSettingMessage",
+  "",
+  sizeof(AdjustSettingMessage),
+  3,
+  adjust_setting_message__field_descriptors,
+  adjust_setting_message__field_indices_by_name,
+  1,  adjust_setting_message__number_ranges,
+  (ProtobufCMessageInit) adjust_setting_message__init,
   NULL,NULL,NULL    /* reserved[123] */
 };
