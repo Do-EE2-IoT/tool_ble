@@ -31,10 +31,6 @@
 #include "uart_lib_header.h"
 #include "my_utils.h"
 #include "message.pb-c.h"
-
-void client_send_sound(uint8_t *data, uint16_t len);
-
-void client_send_warning(uint8_t *data, uint16_t len);
 void uart_cb(uint8_t *data, uint16_t len);
 void client_send_sign(uint8_t *data, uint16_t len);
 void client_send_speed(uint8_t *data, uint16_t len);
@@ -489,7 +485,7 @@ static void esp_gap_cb(esp_gap_ble_cb_event_t event, esp_ble_gap_cb_param_t *par
         switch (scan_result->scan_rst.search_evt)
         {
         case ESP_GAP_SEARCH_INQ_RES_EVT:
-          //  esp_log_buffer_hex(GATTC_TAG, scan_result->scan_rst.bda, 6);
+            esp_log_buffer_hex(GATTC_TAG, scan_result->scan_rst.bda, 6);
             ESP_LOGI(GATTC_TAG, "Searched Adv Data Len %d, Scan Response Len %d", scan_result->scan_rst.adv_data_len, scan_result->scan_rst.scan_rsp_len);
             adv_name = esp_ble_resolve_adv_data(scan_result->scan_rst.ble_adv,
                                                 ESP_BLE_AD_TYPE_NAME_CMPL, &adv_name_len);
@@ -573,7 +569,6 @@ static void esp_gattc_cb(esp_gattc_cb_event_t event, esp_gatt_if_t gattc_if, esp
 }
 
 #define BLE 1
-SpeedMessage speed_msg = SPEED_MESSAGE__INIT;
 void app_main(void)
 {
     // Initialize NVS.
@@ -672,26 +667,18 @@ void app_main(void)
         {
             void *buf;
             unsigned len = 0;
+            SpeedMessage speed_msg = SPEED_MESSAGE__INIT;
             speed_msg.speed = i;
-            i += 3;
             len = speed_message__get_packed_size(&speed_msg);
             buf = (uint8_t *)malloc(len);
             speed_message__pack(&speed_msg, (uint8_t *)buf);
             client_send_speed(buf, len);
             vTaskDelay(1000 / portTICK_PERIOD_MS);
-            // OverlimitSpeedMessage over_speed_msg;
-            // SoundMessage sound_msg;
-            // over_speed_msg.is_over_speed_limit = true;
-            // // is_warning = true;
-            // overlimit_speed_message__pack(&over_speed_msg, buf_warn);
-
-            // len = overlimit_speed_message__get_packed_size(&over_speed_msg);
-            // client_send_warning(buf_warn, len);
         }
     }
 }
 
-SignDisplay receive_data = {0};
+sign_display_on_watch_t receive_data = {0};
 void adjust_distance(int *distance)
 {
     if (*distance >= 250 && *distance < 300)
@@ -720,12 +707,6 @@ void adjust_distance(int *distance)
     }
 }
 
-int current_limit_speed = 0;
-LastDisplay last_display = {0};
-SignDisplay sign_display = {0};
-
-void *bufff;
-bool is_warning = false;
 void uart_cb(uint8_t *data, uint16_t len)
 {
     ESP_LOGI(GATTC_TAG, "Uart data %s", (char *)data);
@@ -742,12 +723,11 @@ void uart_cb(uint8_t *data, uint16_t len)
         adjust_distance(&receive_data.distance_to_ps_3);
 
         SignMessage sign_msg = SIGN_MESSAGE__INIT;
-        SoundMessage sound_msg = SOUND_MESSAGE__INIT;
         void *buf;     // Buffer to store serialized data
         unsigned leng; // Length of serialized data
         sign_msg.position_1 = 15;
         sign_msg.position_2 = 32;
-
+        
         sign_msg.position_1 = receive_data.position_1;
         sign_msg.position_2 = receive_data.position_2;
         sign_msg.distance_2 = receive_data.distance_to_ps_2;
@@ -757,116 +737,14 @@ void uart_cb(uint8_t *data, uint16_t len)
         buf = (uint8_t *)malloc(leng);
         sign_message__pack(&sign_msg, (uint8_t *)buf);
         client_send_sign(buf, leng);
-
-        sign_display.position_1 = sign_msg.position_1;
-        sign_display.position_2 = sign_msg.position_2;
-        sign_display.position_3 = sign_msg.position_3;
-        sign_display.distance_to_ps_2 = sign_msg.position_2;
-        sign_display.distance_to_ps_3 = sign_msg.position_3;
-        if (sign_msg.position_1 != ID_SPEED_LIMIT_120)
-        {
-            current_limit_speed = sign_msg.position_1 * 10;
-        }
-        else
-        {
-            current_limit_speed = 120;
-        }
-        check_sign_two_position(sign_display.distance_to_ps_2, sign_display.distance_to_ps_3);
-        sound_msg.sound_id = check_sound_2(last_display, sign_display);
-        if (sound_msg.sound_id != 1)
-        {
-            void *my_buf;
-            leng = sound_message__get_packed_size(&sound_msg);
-            my_buf = (uint8_t *)malloc(leng);
-            sound_message__pack(&sound_msg, my_buf);
-            client_send_sound(my_buf, leng);
-        }
-        sound_msg.sound_id = check_sound_3(last_display, sign_display);
-
-        if (sound_msg.sound_id != 1)
-        {
-            void *buff;
-            leng = sound_message__get_packed_size(&sound_msg);
-            buff = (uint8_t *)malloc(leng);
-            sound_message__pack(&sound_msg, buff);
-            client_send_sound(buff, leng);
-        }
-        last_display.last_position_1 = sign_msg.position_1;
-        last_display.last_position_2 = sign_msg.position_2;
-        last_display.last_position_3 = sign_msg.position_3;
-        last_display.distance_2 = sign_msg.distance_2;
-        last_display.distance_3 = sign_msg.distance_3;
-    }
-
-    ESP_LOGI("DFDS", "Current %d, speed %d", (int)current_limit_speed, (int)speed_msg.speed);
-    if (speed_msg.speed > current_limit_speed && is_warning == false && speed_msg.speed > 40)
-    {   
-        
-        void *buf_warn;
-        OverlimitSpeedMessage over_speed_msg = OVERLIMIT_SPEED_MESSAGE__INIT;
-        over_speed_msg.is_over_speed_limit = true;
-        is_warning = true;
-        unsigned len = 0;
-        len = overlimit_speed_message__get_packed_size(&over_speed_msg);
-        buf_warn = malloc(len);
-
-        overlimit_speed_message__pack(&over_speed_msg, buf_warn);
-
-        client_send_warning(buf_warn, len);
-        // printf("come here");
-    }
-    else if (speed_msg.speed < current_limit_speed && is_warning == true)
-    {
-        void *buf_warn;
-        is_warning = false;
-        OverlimitSpeedMessage over_speed_msg = OVERLIMIT_SPEED_MESSAGE__INIT;
-        over_speed_msg.is_over_speed_limit = false;
-        unsigned len = 0;
-        len = overlimit_speed_message__get_packed_size(&over_speed_msg);
-        buf_warn = malloc(len);
-        overlimit_speed_message__pack(&over_speed_msg, buf_warn);
-        client_send_warning(buf_warn, len);
     }
 }
-
-// if (speed_msg.speed > current_limit_speed && speed_msg.speed > 40)
-// {
-//     OverlimitSpeedMessage over_speed_msg;
-//     over_speed_msg.is_over_speed_limit = true;
-//     void *buf_warn;
-//     unsigned len = 0;
-//     len = sound_message__get_packed_size(&over_speed_msg);
-//     client_send_sound(buf_warn, len);
-//     client_send_warning(buf_warn, len);
-// }
 
 void client_send_sign(uint8_t *data, uint16_t len)
 {
     esp_ble_gattc_write_char(gl_profile_tab[0].gattc_if,
                              0,
                              0x2a,
-                             len,
-                             data,
-                             ESP_GATT_WRITE_TYPE_RSP,
-                             ESP_GATT_AUTH_REQ_NONE);
-}
-
-void client_send_sound(uint8_t *data, uint16_t len)
-{
-    esp_ble_gattc_write_char(gl_profile_tab[0].gattc_if,
-                             0,
-                             46,
-                             len,
-                             data,
-                             ESP_GATT_WRITE_TYPE_RSP,
-                             ESP_GATT_AUTH_REQ_NONE);
-}
-
-void client_send_warning(uint8_t *data, uint16_t len)
-{
-    esp_ble_gattc_write_char(gl_profile_tab[0].gattc_if,
-                             0,
-                             48,
                              len,
                              data,
                              ESP_GATT_WRITE_TYPE_RSP,

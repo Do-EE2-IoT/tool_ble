@@ -5,7 +5,6 @@
 #include <string.h>
 #include "stdbool.h"
 
-
 #define PRIORITY_1 1
 #define PRIORITY_2 2
 #define PRIORITY_3 3
@@ -81,7 +80,7 @@ typedef struct
 	uint8_t position_3;
 	uint16_t distance_to_ps_2;
 	uint16_t distance_to_ps_3;
-} SignDisplay;
+} sign_display_on_watch_t;
 
 typedef struct
 {
@@ -133,14 +132,10 @@ typedef struct
 	uint8_t last_position_1;
 	uint8_t last_position_2;
 	uint8_t last_position_3;
-	int distance_2;
-	int distance_3;
-} LastDisplay;
+} last_sign_display_t;
 
 sign_data_t sign_handle(uint8_t *data, uint16_t len);
-SignDisplay get_sign_display_on_watch(sign_data_t sign_data);
+sign_display_on_watch_t get_sign_display_on_watch(sign_data_t sign_data);
 void check_sign_two_position(uint8_t ps2, uint8_t ps3);
-int check_sound_2(LastDisplay last_display, SignDisplay sign_display);
-int check_sound_3(LastDisplay last_display, SignDisplay sign_display);
 
 #endif

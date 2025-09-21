@@ -1,75 +1,22 @@
-syntax = "proto3";
+syntax = "proto2";
 
 message SignMessage {
-  uint32 position_1 = 1;  
-  uint32 position_2 = 2;  
-  uint32 distance_2 = 3;  
-  uint32 position_3 = 4;  
-  uint32 distance_3 = 5;  
+  required uint32 position_1 = 1;  
+  required uint32 position_2 = 2;  
+  required uint32 distance_2 = 3;  
+  required uint32 position_3 = 4;  
+  required uint32 distance_3 = 5;  
 }
 
-message SpeedMessage {
-  uint32 speed = 1;
+message SpeedMessage{
+    required uint32 speed = 1;
 }
 
-message SoundMessage {
-  uint32 sound_id = 1;
+message SoundMessage{
+    required uint32 sound_id = 1;
 }
 
-message OverlimitSpeedMessage {
-  bool is_over_speed_limit = 1;
+message OverlimitSpeedMessage{
+    required bool is_over_speed_limit = 1;
 }
 
-
-message OtaTypeMessage{
-  uint32 type = 1;
-}
-
-
-message RotateMessage{
-   uint32 rotate_type = 1;
-}
-
-// 0 - 100 
-message AdjustVolumeSoundMessage{
-   uint32 volume = 1;
-}
-
-// 0 - 100
-message AdjustScreenBrightMessage{
-   uint32 bright_level = 1;
-}
-
-message AdjustSettingMessage {
-    oneof setting {
-        AdjustVolumeSoundMessage volume_msg = 1;
-        AdjustScreenBrightMessage bright_msg = 2;
-        RotateMessage rotate_msg = 3;
-    }
-}
-//protoc --c_out=. message.proto
-
-//I (3470) main: Volume = 0
-//I (3473) main: 0a 00
-//I (3476) main: Volume = 30
-//I (3479) main: 0a 02 08 1e
-//I (3483) main: Volume = 50
-//I (3486) main: 0a 02 08 32
-//I (3490) main: Volume = 100
-//I (3493) main: 0a 02 08 64
-//I (3496) main: Brightness = 0
-//I (3500) main: 12 00
-//I (3503) main: Brightness = 30
-//I (3507) main: 12 02 08 1e
-//I (3510) main: Brightness = 50
-//I (3514) main: 12 02 08 32
-//I (3517) main: Brightness = 100
-//I (3521) main: 12 02 08 64
-//I (3496) main: rotate = 0 -> default
-//I (3500) main: 1A 00
-//I (3503) main: rotate = 1 -> right
-//I (3507) main: 1A 02 08 01
-//I (3510) main: Brightness = 50 -> reverse
-//I (3514) main: 1A 02 08 02
-//I (3517) main: Brightness = 100 -> left
-//I (3521) main: 1A 02 08 03
